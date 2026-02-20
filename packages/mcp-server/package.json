@@ -1,6 +1,6 @@
 {
   "name": "minimax-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP Server for Minimax Accounting API - provides 24 tools for managing invoices, customers, journals, inbox, and more in Minimax ERP",
   "type": "module",
   "main": "./dist/index.js",
