@@ -1,0 +1,26 @@
+{
+  "name": "@minimax-api/mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for Minimax Accounting API",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "minimax-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@minimax-api/core": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

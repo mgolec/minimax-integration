@@ -1,0 +1,18 @@
+{
+  "name": "minimax-integration",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Minimax Accounting API Integration - MCP Server + CLI",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.0"
+  }
+}
