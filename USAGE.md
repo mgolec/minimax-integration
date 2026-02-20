@@ -137,10 +137,10 @@ minimax <command> [options]
 minimax org list
 
 # Get details for a specific org
-minimax org get 44770
+minimax org get 12345
 
 # Save a default org ID (stored in ~/.minimax/config.json)
-minimax org set-default 44770
+minimax org set-default 12345
 ```
 
 ### Dashboard
@@ -150,7 +150,7 @@ minimax org set-default 44770
 minimax dashboard
 
 # For a specific org
-minimax dashboard --org-id 44770
+minimax dashboard --org-id 12345
 
 # As JSON
 minimax dashboard --format json
@@ -169,14 +169,14 @@ minimax invoice list --status I
 minimax invoice list --from 2025-01-01 --to 2025-12-31
 
 # Filter by customer
-minimax invoice list --customer-id 4036368
+minimax invoice list --customer-id 1000001
 
 # Get full invoice details
 minimax invoice get 12345
 
 # Create a draft invoice
 minimax invoice create \
-  --customer-id 4036368 \
+  --customer-id 1000001 \
   --date-issued 2025-02-20 \
   --date-due 2025-03-20 \
   --description "Consulting services" \
@@ -259,7 +259,7 @@ minimax customer list
 minimax customer list --search "Lucid"
 
 # Get customer details
-minimax customer get 4036368
+minimax customer get 1000001
 
 # Create a new customer
 minimax customer create \
@@ -403,7 +403,7 @@ Once connected, the following 23 tools are available to the LLM:
 ```bash
 # 1. Create a draft invoice
 minimax invoice create \
-  --customer-id 4036368 \
+  --customer-id 1000001 \
   --date-issued 2025-02-20 \
   --date-due 2025-03-20 \
   --description "Web development services" \
