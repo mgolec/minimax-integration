@@ -40,7 +40,7 @@ export type { InboxItem, InboxAttachment } from './types/inbox.js';
 export type { Journal, JournalCreateInput, JournalEntry, VatEntry } from './types/journal.js';
 
 // Modules
-export { OrganisationsModule } from './modules/organisations.js';
+export { OrganisationsModule, type OrganisationListItem } from './modules/organisations.js';
 export { DashboardModule } from './modules/dashboard.js';
 export { CustomersModule } from './modules/customers.js';
 export { IssuedInvoicesModule, type IssuedInvoiceListParams } from './modules/issued-invoices.js';

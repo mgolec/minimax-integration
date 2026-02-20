@@ -12,7 +12,7 @@ export interface MinimaxConfig {
   authUrl: string;
 }
 
-const DEFAULT_BASE_URL = 'https://moj.minimax.hr/HR/api';
+const DEFAULT_BASE_URL = 'https://moj.minimax.hr/HR/API/api';
 const DEFAULT_AUTH_URL = 'https://moj.minimax.hr/HR/AUT/oauth20/token';
 
 function loadDotEnv(filePath: string): Record<string, string> {

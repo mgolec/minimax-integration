@@ -9,14 +9,18 @@ export function registerOrganisationTools(server: McpServer, client: MinimaxClie
     'Lists all accessible Minimax organizations for the current user',
     async () => {
       try {
-        const orgs = await client.organisations.list();
+        const result = await client.organisations.list();
+        const rows = result.Rows.map((r) => ({
+          ID: r.Organisation.ID,
+          Name: r.Organisation.Name,
+          APIAccess: r.APIAccess,
+        }));
         const text = formatTable(
-          orgs as unknown as Record<string, unknown>[],
+          rows as unknown as Record<string, unknown>[],
           [
-            { key: 'OrganisationId', label: 'ID', width: 8 },
+            { key: 'ID', label: 'ID', width: 8 },
             { key: 'Name', label: 'Name', width: 40 },
-            { key: 'TaxNumber', label: 'Tax Number', width: 15 },
-            { key: 'Country', label: 'Country', width: 10 },
+            { key: 'APIAccess', label: 'API Access', width: 12 },
           ],
         );
         return formatSuccess(text);

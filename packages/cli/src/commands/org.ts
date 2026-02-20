@@ -30,11 +30,16 @@ export function registerOrgCommands(parent: Command, getClient: () => MinimaxCli
     .action(async () => {
       try {
         const client = getClient();
-        const orgs = await client.organisations.list();
+        const result = await client.organisations.list();
         const format = parent.opts().format ?? 'table';
         if (format === 'json') {
-          console.log(formatJson(orgs));
+          console.log(formatJson(result));
         } else {
+          const orgs = result.Rows.map((r) => ({
+            ID: r.Organisation.ID,
+            Name: r.Organisation.Name,
+            APIAccess: r.APIAccess,
+          }));
           console.log(formatOrgsTable(orgs));
         }
       } catch (err) {
