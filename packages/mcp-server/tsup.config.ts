@@ -9,4 +9,6 @@ export default defineConfig({
   banner: {
     js: '#!/usr/bin/env node',
   },
+  // Bundle @minimax-api/core into the output so the published package is self-contained
+  noExternal: ['@minimax-api/core'],
 });

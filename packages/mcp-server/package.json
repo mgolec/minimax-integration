@@ -1,24 +1,52 @@
 {
-  "name": "@minimax-api/mcp-server",
+  "name": "minimax-mcp-server",
   "version": "1.0.0",
-  "description": "MCP Server for Minimax Accounting API",
+  "description": "MCP Server for Minimax Accounting API - provides 24 tools for managing invoices, customers, journals, inbox, and more in Minimax ERP",
   "type": "module",
   "main": "./dist/index.js",
   "bin": {
     "minimax-mcp": "./dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest run",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "minimax",
+    "mcp",
+    "model-context-protocol",
+    "accounting",
+    "erp",
+    "invoices",
+    "croatia",
+    "claude",
+    "llm",
+    "ai"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucidlayer/minimax-integration",
+    "directory": "packages/mcp-server"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
-    "@minimax-api/core": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.12.1",
+    "csv-parse": "^5.6.0",
+    "fast-xml-parser": "^4.5.1",
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@minimax-api/core": "workspace:*",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
