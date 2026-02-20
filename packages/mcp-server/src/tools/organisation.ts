@@ -46,27 +46,63 @@ export function registerOrganisationTools(server: McpServer, client: MinimaxClie
 
   server.tool(
     'get-dashboard',
-    'Gets financial overview / KPIs for an organization (revenue, expenses, profit, receivables, payables)',
+    'Gets financial overview / KPIs for an organization: issued/received invoice summaries (paid, unpaid, overdue), unpaid aging (15/30/45/60 days), top customers/debtors/suppliers/creditors, monthly revenue vs expenses',
     { orgId: z.number().describe('Organization ID') },
     async ({ orgId }) => {
       try {
-        const dashboard = await client.dashboard.get(orgId);
-        const lines: string[] = [
-          'Financial Dashboard',
-          '='.repeat(40),
-          `Revenue:              ${dashboard.Revenue ?? 'N/A'}`,
-          `Expenses:             ${dashboard.Expenses ?? 'N/A'}`,
-          `Profit:               ${dashboard.Profit ?? 'N/A'}`,
-          `Cash Balance:         ${dashboard.CashBalance ?? 'N/A'}`,
-          '',
-          `Accounts Receivable:  ${dashboard.AccountsReceivable ?? 'N/A'}`,
-          `Accounts Payable:     ${dashboard.AccountsPayable ?? 'N/A'}`,
-          `Overdue Receivables:  ${dashboard.OverdueReceivables ?? 'N/A'}`,
-          `Overdue Payables:     ${dashboard.OverduePayables ?? 'N/A'}`,
-          '',
-          `Unpaid Issued:        ${dashboard.UnpaidIssuedInvoices ?? 'N/A'}`,
-          `Unpaid Received:      ${dashboard.UnpaidReceivedInvoices ?? 'N/A'}`,
-        ];
+        const dashboard = await client.dashboard.get(orgId) as Record<string, unknown>;
+        const d = dashboard as {
+          IssuedInvoicesSummary?: { Data?: { Type: string; Count: number; Value: number }[] };
+          ReceivedInvoicesSummary?: { Data?: { Type: string; Count: number; Value: number }[] };
+          IssuedInvoicesUnpaid?: { Data?: { Type: string; Count: number; Value: number }[] };
+          ReceivedInvoicesUnpaid?: { Data?: { Type: string; Count: number; Value: number }[] };
+          TopCustomers?: { Data?: { Position: number; Customer: string; Value: number }[] };
+          TopSuppliers?: { Data?: { Position: number; Customer: string; Value: number }[] };
+          TopDebtors?: { Data?: { Position: number; Customer: string; Value: number }[] };
+          TopCreditors?: { Data?: { Position: number; Customer: string; Value: number }[] };
+          RevenuesExpenses?: { Data?: { Month: number; Revenue: number; Expense: number }[] };
+        };
+
+        const lines: string[] = ['Financial Dashboard', '='.repeat(60)];
+
+        const formatSummary = (label: string, data?: { Type: string; Count: number; Value: number }[]) => {
+          if (!data) return;
+          lines.push(`\n${label}:`);
+          for (const item of data) {
+            lines.push(`  ${item.Type.padEnd(20)} ${String(item.Count).padStart(4)} invoices  ${item.Value.toFixed(2).padStart(12)} EUR`);
+          }
+        };
+
+        formatSummary('Issued Invoices', d.IssuedInvoicesSummary?.Data);
+        formatSummary('Received Invoices', d.ReceivedInvoicesSummary?.Data);
+        formatSummary('Unpaid Issued (aging)', d.IssuedInvoicesUnpaid?.Data);
+        formatSummary('Unpaid Received (aging)', d.ReceivedInvoicesUnpaid?.Data);
+
+        const formatTop = (label: string, data?: { Position: number; Customer: string; Value: number }[]) => {
+          if (!data) return;
+          const nonEmpty = data.filter((x) => x.Customer);
+          if (nonEmpty.length === 0) return;
+          lines.push(`\n${label}:`);
+          for (const item of nonEmpty) {
+            lines.push(`  ${String(item.Position).padEnd(3)} ${item.Customer.padEnd(45)} ${item.Value.toFixed(2).padStart(12)} EUR`);
+          }
+        };
+
+        formatTop('Top Customers', d.TopCustomers?.Data);
+        formatTop('Top Suppliers', d.TopSuppliers?.Data);
+        formatTop('Top Debtors', d.TopDebtors?.Data);
+        formatTop('Top Creditors', d.TopCreditors?.Data);
+
+        if (d.RevenuesExpenses?.Data) {
+          const nonZero = d.RevenuesExpenses.Data.filter((m) => m.Revenue > 0 || m.Expense > 0);
+          if (nonZero.length > 0) {
+            lines.push('\nMonthly Revenue vs Expenses:');
+            for (const m of nonZero) {
+              lines.push(`  Month ${String(m.Month).padStart(2)}: Revenue ${m.Revenue.toFixed(2).padStart(12)}  Expense ${m.Expense.toFixed(2).padStart(12)}`);
+            }
+          }
+        }
+
         return formatSuccess(lines.join('\n'));
       } catch (error) {
         return formatError(error);
